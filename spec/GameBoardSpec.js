@@ -56,3 +56,40 @@
     colisionado con objetos de cierto tipo, no con todos los objetos.
 
 */
+
+
+describe("Clase GameBoard", function(){
+
+	beforeEach(function(){
+		loadFixtures('index.html');
+	});
+	var board = new GameBoard();
+
+
+
+
+	it("Añadir/Eliminar sprites", function(){
+		nave = new PlayerShip();
+		board.add(nave);
+		expect(board.objects.length).toEqual(1);
+		
+		board.resetRemoved();
+		board.remove(nave);
+		board.finalizeRemoved();
+		expect(board.objects.length).toEqual(0);
+
+	});
+	
+
+
+
+
+
+
+
+
+
+
+
+
+});

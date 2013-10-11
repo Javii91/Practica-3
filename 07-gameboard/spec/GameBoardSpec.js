@@ -92,7 +92,7 @@ describe("Clase GameBoard", function(){
 	it("Draw/Step", function(){
 		spyOn(SpriteSheet, "draw");
 		
-		nave = new PlayerShip();
+		
 		board.add(nave);
 		board.draw(ctx);
 		expect(SpriteSheet.draw).toHaveBeenCalled();
@@ -106,7 +106,19 @@ describe("Clase GameBoard", function(){
 	});
 	
 	it("Colision", function(){
-
+		
+		var missile = function () {
+			this.x =140
+			this.y =428
+			this.h = 40
+			this.w = 40
+		}
+		misil = new missile();
+		board.add(misil);
+		
+		console.log(board);
+		expect(board.collide(nave)).toBe(misil);
+		
 
 	});
 

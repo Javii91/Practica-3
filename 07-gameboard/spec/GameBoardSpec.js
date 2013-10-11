@@ -97,11 +97,11 @@ describe("Clase GameBoard", function(){
 		board.draw(ctx);
 		expect(SpriteSheet.draw).toHaveBeenCalled();
 		
-		
 		spyOn(nave, "step");
 		var dt = 1;
 		board.step(dt);
 		expect(nave.step).toHaveBeenCalled();
+
 
 	});
 	
@@ -116,8 +116,24 @@ describe("Clase GameBoard", function(){
 		misil = new missile();
 		board.add(misil);
 		
-		console.log(board);
-		expect(board.collide(nave)).toBe(misil);
+		expect(board.collide(nave)).toEqual(misil);
+		
+
+	});
+	
+	it("iterate", function(){
+		var newboard = new GameBoard();
+		
+		var dummy = function () {
+			this.f = function () {}
+		}
+		dummies = new dummy();
+		newboard.add(dummies);
+		
+		spyOn(dummies, "f");
+		
+		newboard.iterate("f")
+		expect(dummies.f).toHaveBeenCalled();
 		
 
 	});

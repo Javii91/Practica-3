@@ -60,15 +60,23 @@
 
 describe("Clase GameBoard", function(){
 
+	var canvas, ctx;
+	
 	beforeEach(function(){
 		loadFixtures('index.html');
+		
+		canvas = $('#game')[0];
+		expect(canvas).toExist();
+
+		ctx = canvas.getContext('2d');
+		expect(ctx).toBeDefined();
 	});
 	var board = new GameBoard();
 
 
 
 
-	it("Añadir/Eliminar sprites", function(){
+	it("Añadir/Eliminar objetos", function(){
 		nave = new PlayerShip();
 		board.add(nave);
 		expect(board.objects.length).toEqual(1);
@@ -81,6 +89,26 @@ describe("Clase GameBoard", function(){
 	});
 	
 
+	it("Draw/Step", function(){
+		spyOn(SpriteSheet, "draw");
+		
+		nave = new PlayerShip();
+		board.add(nave);
+		board.draw(ctx);
+		expect(SpriteSheet.draw).toHaveBeenCalled();
+		
+		
+		spyOn(nave, "step");
+		var dt = 1;
+		board.step(dt);
+		expect(nave.step).toHaveBeenCalled();
+
+	});
+	
+	it("Colision", function(){
+
+
+	});
 
 
 

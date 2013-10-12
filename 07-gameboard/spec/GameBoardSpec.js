@@ -70,42 +70,94 @@ describe("Clase GameBoard", function(){
 
 		ctx = canvas.getContext('2d');
 		expect(ctx).toBeDefined();
-	});
-	var board = new GameBoard();
-
-
-
-
-	it("Añadir/Eliminar objetos", function(){
-		nave = new PlayerShip();
-		board.add(nave);
-		expect(board.objects.length).toEqual(1);
 		
-		board.resetRemoved();
-		board.remove(nave);
-		board.finalizeRemoved();
-		expect(board.objects.length).toEqual(0);
+		newboard = new GameBoard();
+	});
+
+
+
+
+	it("GameBoard.Add()", function(){
+		
+		var dummy = function () {}
+		d = new dummy();
+		newboard.add(d);
+		expect(newboard.objects.length).toEqual(1);
+		
+
+
+	});
+	
+	it("Remove from objects", function(){
+		
+		var dummy = function () {}
+		
+		d = new dummy();
+		d2 = new dummy();
+		
+		newboard.add(d);
+		newboard.add(d2);
+		
+		expect(newboard.objects.length).toEqual(2);
+		
+		newboard.resetRemoved();
+		newboard.remove(d);
+		newboard.finalizeRemoved();
+		
+		expect(newboard.objects.length).toEqual(1);
+		expect(newboard.objects[0]).toEqual(d2);
 
 	});
 	
 
-	it("Draw/Step", function(){
-		spyOn(SpriteSheet, "draw");
+	it("GameBoard.draw()", function(){
 		
+		var dummy = function () {
+			this.draw = function (){}
+		}
 		
-		board.add(nave);
-		board.draw(ctx);
-		expect(SpriteSheet.draw).toHaveBeenCalled();
+		d = new dummy();
+		d2 = new dummy();
 		
-		spyOn(nave, "step");
+		newboard.add(d);
+		newboard.add(d2);
+		
+		spyOn(d, "draw");
+		spyOn(d2, "draw");
+		
+		newboard.draw(ctx);
+		
+		expect(d.draw).toHaveBeenCalled();
+		expect(d2.draw).toHaveBeenCalled();
+		
+
+	});
+	
+	it("GameBoard.step()", function(){
+		
+		var dummy = function () {
+			this.step = function (){}
+		}
+		
+		d = new dummy();
+		d2 = new dummy();
+		
+		newboard.add(d);
+		newboard.add(d2);
+		
+		spyOn(d, "step");
+		spyOn(d2, "step");
+		
 		var dt = 1;
-		board.step(dt);
-		expect(nave.step).toHaveBeenCalled();
+		newboard.step(dt);
+		
+		expect(d.step).toHaveBeenCalled();
+		expect(d2.step).toHaveBeenCalled();
 
 
 	});
 	
-	it("Colision", function(){
+	it("GameBoard.collide()", function(){
 		
 		var missile = function () {
 			this.x =140
@@ -113,34 +165,67 @@ describe("Clase GameBoard", function(){
 			this.h = 40
 			this.w = 40
 		}
-		misil = new missile();
-		board.add(misil);
 		
-		expect(board.collide(nave)).toEqual(misil);
+		misil = new missile();
+		misil2 = new missile();
+		
+		newboard.add(misil);
+		newboard.add(misil2);
+		
+		expect(newboard.collide(misil)).toEqual(misil2);
 		
 
 	});
 	
-	it("iterate", function(){
-		var newboard = new GameBoard();
+	it("GameBoard.iterate()", function(){
 		
 		var dummy = function () {
 			this.f = function () {}
 		}
-		dummies = new dummy();
-		newboard.add(dummies);
+		var dummy1 = new dummy();
+		var dummy2 = new dummy();
+		newboard.add(dummy1);
+		newboard.add(dummy2);
 		
-		spyOn(dummies, "f");
+		spyOn(dummy2, "f");
+		spyOn(dummy1, "f");
 		
 		newboard.iterate("f")
-		expect(dummies.f).toHaveBeenCalled();
+		expect(dummy1.f).toHaveBeenCalled();
+		expect(dummy2.f).toHaveBeenCalled();
 		
-
 	});
 
+	it("GameBoard.overlap()", function(){
+		
+		var ojt = function (x,y,h,w) {
+			this.x = x
+			this.y = y
+			this.h = h
+			this.w = w
+		}
+		var dummy1 = new ojt(10,10,10,10);
+		var dummy2 = new ojt(15,15,15,15);
+		var dummy3 = new ojt(30,30,15,15);
 
+		expect(newboard.overlap(dummy1,dummy2)).toEqual(true);
+		expect(newboard.overlap(dummy1,dummy3)).toEqual(false);
+		
+	});
 
-
+	it("GameBoard.detect()", function(){
+		
+		var dummy = function () {}
+		
+		var dummy1 = new dummy();
+		var dummy2 = new dummy();
+		
+		newboard.add(dummy1);
+		newboard.add(dummy2);
+		
+		expect(newboard.detect(function() {return true})).toEqual(dummy1);
+		
+	});
 
 
 

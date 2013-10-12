@@ -27,3 +27,59 @@
     la clase en el prototipo
 
 */
+
+describe("Clase PlayerMissile", function(){
+
+	var canvas, ctx;
+	
+	beforeEach(function(){
+		loadFixtures('index.html');
+		
+		canvas = $('#game')[0];
+		expect(canvas).toExist();
+
+		ctx = canvas.getContext('2d');
+		expect(ctx).toBeDefined();
+	});
+	
+	
+
+	it("PlayerMissile.draw()", function(){
+	
+		SpriteSheet = {
+			draw : function () {},
+			map : {missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 }}
+		}
+		m = new PlayerMissile(10,10);
+		
+		spyOn(SpriteSheet, "draw");
+		
+		m.draw(ctx)
+		
+		expect(SpriteSheet.draw).toHaveBeenCalled();
+		expect(SpriteSheet.draw.calls[0].args[0]).toEqual(ctx);
+		expect(SpriteSheet.draw.calls[0].args[1]).toEqual("missile");
+ 		expect(SpriteSheet.draw.calls[0].args[2]).toEqual(m.x);
+ 		expect(SpriteSheet.draw.calls[0].args[3]).toEqual(m.y);
+ 		
+		
+
+	});
+	
+	it("PlayerMissile.step()", function(){
+	
+		m = new PlayerMissile(10,90);
+
+		var dt = 0.1
+		m.step(dt)
+		
+		expect(m.y).toEqual(90 - 10 + m.vy * dt);
+ 		
+		
+
+	});
+	
+
+
+
+})

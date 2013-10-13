@@ -69,11 +69,23 @@ describe("Clase PlayerMissile", function(){
 	it("PlayerMissile.step()", function(){
 	
 		m = new PlayerMissile(10,90);
+		m2 = new PlayerMissile(10,20);
 
+		var dummyBoard = {
+  			remove: function(obj) {}	
+  		};
+  		
+  		m2.board = dummyBoard;
+  		
 		var dt = 0.1
 		m.step(dt)
 		
 		expect(m.y).toEqual(90 - 10 + m.vy * dt);
+		
+  		spyOn(m2.board, "remove")
+  		
+		m2.step(dt)
+		expect(m2.board.remove).toHaveBeenCalled();
  		
 		
 
